@@ -5,186 +5,312 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>田中マサキ — AI PM Guild</title>
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      background:#08090e; color:#e0e0e0;
-      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Hiragino Sans',Roboto,sans-serif;
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+
+    *{margin:0;padding:0;box-sizing:border-box;}
+
+    body{
+      background:#020208;color:#e0e4f0;
+      font-family:'Inter',-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;
       -webkit-font-smoothing:antialiased;
-      min-height:100vh; padding:0;
-    }
-    .hero {
-      background:linear-gradient(135deg,#6b3a1f,#cd7f32,#e8a85c);
-      padding:48px 24px 36px; text-align:center;
-    }
-    .hero-emoji { font-size:56px; line-height:1; }
-    .hero-name { font-size:28px; font-weight:800; color:#fff; margin:12px 0 4px; }
-    .hero-role { font-size:13px; color:rgba(255,255,255,0.7); font-weight:600; }
-    .hero-rank { font-size:14px; color:rgba(255,255,255,0.9); font-weight:700; margin-top:4px; }
-    .hero-summary { font-size:13px; color:rgba(255,255,255,0.6); margin-top:8px; max-width:400px; margin-left:auto; margin-right:auto; line-height:1.5; }
-
-    .container { max-width:520px; margin:0 auto; padding:0 16px 40px; }
-
-    .stats-bar {
-      display:flex; gap:8px; margin:-24px 16px 0; position:relative; z-index:1;
-    }
-    .stat {
-      flex:1; background:#111320; border-radius:14px; padding:16px 8px;
-      text-align:center; border:1px solid #1e2040;
-    }
-    .stat-num { font-size:24px; font-weight:800; color:#e0e4ff; line-height:1; }
-    .stat-label { font-size:9px; color:#6b7094; font-weight:700; letter-spacing:1px; margin-top:6px; }
-
-    .card {
-      background:#111320; border-radius:16px; padding:24px;
-      border:1px solid #1e2040; margin-top:16px;
-    }
-    .section-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
-    .section-label { font-size:10px; color:#6b7094; font-weight:700; letter-spacing:1.5px; }
-    .section-value { font-size:13px; color:#c8cce0; font-weight:700; }
-
-    .tag-wrap { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
-    .tag {
-      background:#1c1f35; border:1px solid #2e3354; border-radius:20px;
-      padding:6px 16px; font-size:12px; color:#b0b8e0;
-    }
-    .empty-hint { color:#4a4f6e; font-size:13px; line-height:1.7; margin-top:8px; }
-
-    .progress-track { background:#0a0c18; border-radius:10px; height:10px; overflow:hidden; margin:8px 0 14px; }
-    .progress-fill { background:linear-gradient(90deg,#6366f1,#a78bfa); height:100%; border-radius:10px; }
-
-    .check-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
-    .check-item { font-size:12px; padding:4px 0; }
-
-    .next-lifestyle {
-      margin-top:16px; padding:16px; background:#0d0f1a; border-radius:12px;
-      border:1px solid #1a1d35;
-    }
-    .lifestyle-income { font-size:20px; font-weight:800; color:#a78bfa; margin-bottom:4px; }
-    .lifestyle-desc { font-size:12px; color:#7a7f9a; line-height:1.6; }
-
-    .earnings-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
-    .earnings-item { background:#0d0f1a; border-radius:12px; padding:16px; text-align:center; border:1px solid #1a1d35; }
-    .earnings-num { font-size:20px; font-weight:800; color:#4ade80; }
-    .earnings-label { font-size:10px; color:#6b7094; font-weight:600; letter-spacing:0.5px; margin-top:4px; }
-
-    .potential-box { margin-top:12px; }
-    .potential-title { font-size:15px; font-weight:700; color:#c8cce0; margin-bottom:8px; }
-    .potential-desc { font-size:13px; color:#7a7f9a; line-height:1.7; }
-    .potential-steps { display:flex; gap:12px; margin-top:16px; }
-    .step {
-      flex:1; background:#0d0f1a; border-radius:12px; padding:14px 10px;
-      text-align:center; font-size:12px; color:#a0a8c0; line-height:1.5;
-      border:1px solid #1a1d35;
-    }
-    .step-num {
-      display:block; width:24px; height:24px; line-height:24px; margin:0 auto 6px;
-      background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#fff;
-      border-radius:50%; font-size:11px; font-weight:700;
+      min-height:100vh;overflow-x:hidden;
+      position:relative;
     }
 
-    .milestone-item { display:flex; gap:12px; padding:10px 0; border-bottom:1px solid #1a1d35; }
-    .milestone-item:last-child { border-bottom:none; }
-    .milestone-date { font-size:11px; color:#6b7094; white-space:nowrap; min-width:80px; padding-top:2px; }
-    .milestone-text { font-size:13px; color:#c8cce0; }
+    canvas#stars{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
 
-    .roadmap { margin-top:16px; }
-    .roadmap-item { display:flex; gap:16px; padding:14px 0; position:relative; }
-    .roadmap-item:not(:last-child)::before {
-      content:''; position:absolute; left:9px; top:34px; bottom:-14px;
-      width:2px; background:#1e2040;
-    }
-    .roadmap-dot {
-      width:20px; height:20px; border-radius:50%; flex-shrink:0; margin-top:2px;
-    }
-    .dot-done { background:#4ade80; }
-    .dot-current { background:linear-gradient(135deg,#6366f1,#a78bfa); box-shadow:0 0 12px rgba(99,102,241,0.5); }
-    .dot-future { background:#1e2040; border:2px solid #2e3354; }
-    .roadmap-body { flex:1; }
-    .roadmap-rank { font-size:14px; font-weight:700; color:#e0e4ff; }
-    .roadmap-phase { font-size:11px; color:#6b7094; font-weight:600; margin-left:6px; }
-    .roadmap-income { font-size:16px; font-weight:800; color:#a78bfa; margin:4px 0 2px; }
-    .roadmap-life { font-size:12px; color:#7a7f9a; line-height:1.5; }
+    /* Nebula blurs */
+    .nebula{position:fixed;border-radius:50%;filter:blur(120px);opacity:0.15;z-index:0;pointer-events:none;}
+    .nebula-1{width:600px;height:600px;background:radial-gradient(circle,#cd7f32,#8b4513);top:-200px;left:-200px;animation:float1 20s ease-in-out infinite;}
+    .nebula-2{width:500px;height:500px;background:radial-gradient(circle,#6366f1,#1e1b4b);bottom:-100px;right:-150px;animation:float2 25s ease-in-out infinite;}
+    .nebula-3{width:400px;height:400px;background:radial-gradient(circle,#a78bfa,#312e81);top:40%;left:50%;animation:float3 18s ease-in-out infinite;}
 
-    .footer {
-      text-align:center; padding:24px 16px; font-size:10px; color:#2e3250;
-    }
+    @keyframes float1{0%,100%{transform:translate(0,0)scale(1);}50%{transform:translate(60px,40px)scale(1.1);}}
+    @keyframes float2{0%,100%{transform:translate(0,0)scale(1);}50%{transform:translate(-50px,-30px)scale(1.15);}}
+    @keyframes float3{0%,100%{transform:translate(-50%,0)scale(1);}50%{transform:translate(-50%,30px)scale(1.08);}}
+    @keyframes pulse{0%,100%{opacity:0.6;transform:scale(1);}50%{opacity:1;transform:scale(1.05);}}
+    @keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+    @keyframes slideUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes glow{0%,100%{text-shadow:0 0 20px rgba(99,102,241,0.3);}50%{text-shadow:0 0 40px rgba(99,102,241,0.6),0 0 80px rgba(99,102,241,0.2);}}
 
-    .cta-box {
-      text-align:center; margin-top:16px; padding:20px;
-      background:linear-gradient(135deg,rgba(99,102,241,0.1),rgba(139,92,246,0.1));
-      border-radius:14px; border:1px solid #2e2860;
+    .page{position:relative;z-index:1;}
+
+    /* HERO */
+    .hero{
+      text-align:center;padding:60px 24px 48px;
+      position:relative;overflow:hidden;
     }
-    .cta-text { font-size:14px; color:#c8cce0; line-height:1.7; margin-bottom:4px; }
-    .cta-bold { font-size:16px; font-weight:800; color:#a78bfa; }
+    .hero::after{
+      content:'';position:absolute;bottom:0;left:0;right:0;height:120px;
+      background:linear-gradient(transparent,#020208);
+    }
+    .rank-orb{
+      width:100px;height:100px;margin:0 auto 16px;
+      border-radius:50%;
+      background:linear-gradient(135deg,#8b4513,#cd7f32,#e8a85c);
+      display:flex;align-items:center;justify-content:center;
+      font-size:48px;line-height:1;
+      box-shadow:0 0 40px #cd7f3244,0 0 80px #cd7f3222;
+      animation:pulse 4s ease-in-out infinite;
+      position:relative;
+    }
+    .rank-orb::before{
+      content:'';position:absolute;inset:-3px;border-radius:50%;
+      background:conic-gradient(from 0deg,transparent,#cd7f32,transparent,#e8a85c,transparent);
+      animation:spin 8s linear infinite;opacity:0.4;z-index:-1;
+    }
+    .hero-name{
+      font-size:32px;font-weight:900;
+      background:linear-gradient(135deg,#fff,#e8a85c);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      background-clip:text;
+      animation:glow 4s ease-in-out infinite;
+    }
+    .hero-role{font-size:13px;color:rgba(255,255,255,0.5);font-weight:600;margin-top:4px;letter-spacing:1px;}
+    .hero-phase{
+      display:inline-block;margin-top:12px;
+      padding:6px 20px;border-radius:20px;
+      background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);
+      font-size:11px;font-weight:700;letter-spacing:2px;color:#a78bfa;
+    }
+    .hero-summary{font-size:13px;color:rgba(255,255,255,0.4);margin-top:12px;max-width:360px;margin-left:auto;margin-right:auto;line-height:1.6;}
+
+    .container{max-width:520px;margin:0 auto;padding:0 16px 60px;}
+
+    /* Stats */
+    .stats{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
+      margin-top:-20px;position:relative;z-index:2;
+    }
+    .stat-cell{
+      background:rgba(17,19,32,0.8);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+      border:1px solid rgba(99,102,241,0.15);border-radius:16px;
+      padding:18px 8px;text-align:center;
+      animation:slideUp 0.6s ease-out both;
+    }
+    .stat-cell:nth-child(1){animation-delay:0.1s;}
+    .stat-cell:nth-child(2){animation-delay:0.2s;}
+    .stat-cell:nth-child(3){animation-delay:0.3s;}
+    .stat-cell:nth-child(4){animation-delay:0.4s;}
+    .stat-num{font-size:26px;font-weight:900;color:#e0e4ff;line-height:1;}
+    .stat-lbl{font-size:8px;color:#6366f1;font-weight:700;letter-spacing:1.5px;margin-top:8px;}
+
+    /* Glass Card */
+    .glass-card{
+      background:rgba(11,13,25,0.7);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+      border:1px solid rgba(99,102,241,0.12);border-radius:20px;
+      padding:28px;margin-top:16px;
+      animation:slideUp 0.6s ease-out both;
+    }
+    .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+    .card-label{font-size:10px;color:#6366f1;font-weight:700;letter-spacing:2px;}
+    .card-badge{font-size:13px;color:#e0e4ff;font-weight:700;}
+
+    /* Skills */
+    .skills-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+    .skill-tag{
+      background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);
+      border-radius:24px;padding:7px 18px;font-size:12px;color:#b0b8e0;
+      transition:all 0.3s;cursor:default;
+    }
+    .skill-tag:hover{background:rgba(99,102,241,0.2);border-color:rgba(99,102,241,0.4);color:#e0e4ff;transform:translateY(-2px);}
+    .empty-hint{color:#3a3d5a;font-size:13px;line-height:1.8;margin-top:10px;}
+
+    /* Progress */
+    .progress-outer{
+      background:rgba(10,12,24,0.8);border-radius:12px;height:8px;overflow:hidden;
+      margin:8px 0 18px;border:1px solid rgba(99,102,241,0.1);
+    }
+    .progress-inner{
+      height:100%;border-radius:12px;
+      background:linear-gradient(90deg,#6366f1,#a78bfa,#c084fc);
+      box-shadow:0 0 16px rgba(99,102,241,0.4);
+      position:relative;overflow:hidden;
+    }
+    .progress-inner::after{
+      content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+      animation:shimmer 2s infinite;
+    }
+    @keyframes shimmer{0%{left:-100%;}100%{left:100%;}}
+
+    /* Quest */
+    .quest-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+    .quest-item{
+      display:flex;align-items:center;gap:8px;padding:8px 10px;
+      border-radius:10px;font-size:12px;color:#5a5f80;
+      transition:background 0.2s;
+    }
+    .quest-item:hover{background:rgba(99,102,241,0.05);}
+    .quest-item.done{color:#4ade80;}
+    .quest-icon{font-size:14px;width:20px;text-align:center;}
+    .quest-prog{margin-left:auto;font-weight:700;font-size:11px;}
+
+    /* Vision */
+    .vision-box{
+      margin-top:18px;padding:20px;
+      background:linear-gradient(135deg,rgba(99,102,241,0.08),rgba(139,92,246,0.08));
+      border:1px solid rgba(99,102,241,0.15);border-radius:16px;
+      text-align:center;
+    }
+    .vision-income{font-size:24px;font-weight:900;color:#a78bfa;animation:glow 4s ease-in-out infinite;}
+    .vision-text{font-size:12px;color:#7a7f9a;margin-top:6px;line-height:1.6;}
+
+    /* Earnings */
+    .earn-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;}
+    .earn-cell{
+      background:rgba(10,12,24,0.6);border:1px solid rgba(74,222,128,0.1);
+      border-radius:14px;padding:18px;text-align:center;
+    }
+    .earn-val{font-size:22px;font-weight:900;}
+    .glow-green{color:#4ade80;text-shadow:0 0 20px rgba(74,222,128,0.3);}
+    .earn-lbl{font-size:10px;color:#6b7094;font-weight:600;letter-spacing:0.5px;margin-top:6px;}
+
+    /* Potential */
+    .potential{margin-top:14px;}
+    .potential-lead{font-size:15px;font-weight:700;color:#c8cce0;}
+    .potential-sub{font-size:13px;color:#6b7094;line-height:1.7;margin-top:6px;}
+    .steps-row{display:flex;align-items:center;gap:0;margin-top:18px;justify-content:center;}
+    .step-card{
+      background:rgba(99,102,241,0.06);border:1px solid rgba(99,102,241,0.15);
+      border-radius:14px;padding:16px 14px;text-align:center;flex:1;max-width:110px;
+    }
+    .step-orb{
+      width:28px;height:28px;line-height:28px;margin:0 auto 6px;
+      background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;
+      border-radius:50%;font-size:12px;font-weight:800;
+    }
+    .step-txt{font-size:11px;color:#a0a8c0;}
+    .step-arrow{color:#2e3354;font-size:16px;padding:0 6px;}
+
+    /* Milestones */
+    .ms-item{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid rgba(99,102,241,0.08);}
+    .ms-item:last-child{border-bottom:none;}
+    .ms-date{font-size:11px;color:#4a4f6e;white-space:nowrap;min-width:80px;padding-top:2px;}
+    .ms-text{font-size:13px;color:#c8cce0;}
+
+    /* Roadmap */
+    .roadmap{margin-top:16px;position:relative;}
+    .rm-item{display:flex;gap:18px;padding:16px 0;position:relative;}
+    .rm-line-wrap{
+      width:24px;display:flex;flex-direction:column;align-items:center;
+      position:relative;flex-shrink:0;
+    }
+    .rm-item:not(:last-child) .rm-line-wrap::after{
+      content:'';position:absolute;top:28px;bottom:-16px;width:2px;
+      background:linear-gradient(180deg,rgba(99,102,241,0.3),rgba(99,102,241,0.05));
+    }
+    .rm-dot{
+      width:16px;height:16px;border-radius:50%;margin-top:4px;
+      transition:all 0.3s;
+    }
+    .rm-item.past .rm-dot{background:#4ade80;box-shadow:0 0 10px rgba(74,222,128,0.3);}
+    .rm-item.current .rm-dot{
+      background:linear-gradient(135deg,#6366f1,#a78bfa);
+      box-shadow:0 0 20px rgba(99,102,241,0.5);
+      animation:pulse 3s ease-in-out infinite;
+    }
+    .rm-item.future .rm-dot{background:rgba(30,32,64,0.8);border:2px solid #2e3354;}
+    .rm-item.future{opacity:0.4;}
+    .rm-body{flex:1;}
+    .rm-rank{font-size:15px;font-weight:800;color:#e0e4ff;}
+    .rm-phase{font-size:10px;color:#6366f1;font-weight:700;letter-spacing:1.5px;margin-top:2px;}
+    .rm-income{font-size:18px;font-weight:900;color:#a78bfa;margin-top:6px;}
+    .rm-life{font-size:12px;color:#5a5f80;line-height:1.6;margin-top:2px;}
+
+    /* CTA */
+    .cta{
+      text-align:center;margin-top:24px;padding:28px 24px;
+      background:linear-gradient(135deg,rgba(99,102,241,0.06),rgba(139,92,246,0.06));
+      border:1px solid rgba(99,102,241,0.12);border-radius:20px;
+      position:relative;overflow:hidden;
+    }
+    .cta::before{
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse at center,rgba(99,102,241,0.08),transparent 70%);
+    }
+    .cta-msg{font-size:14px;color:#a0a8c0;line-height:1.8;position:relative;}
+
+    .footer{text-align:center;padding:32px 16px;font-size:10px;color:#1e2040;letter-spacing:1px;}
   </style>
 </head>
 <body>
+<canvas id="stars"></canvas>
+<div class="nebula nebula-1"></div>
+<div class="nebula nebula-2"></div>
+<div class="nebula nebula-3"></div>
+
+<div class="page">
 
   <!-- HERO -->
   <div class="hero">
-    <div class="hero-emoji">🥉</div>
+    <div class="rank-orb">🥉</div>
     <div class="hero-name">田中マサキ</div>
     <div class="hero-role"></div>
-    <div class="hero-rank">🥉ブロンズ — スタートライン</div>
+    <div class="hero-phase">GENESIS</div>
     
   </div>
 
-  <!-- STATS BAR -->
   <div class="container">
-    <div class="stats-bar">
-      <div class="stat">
-        <div class="stat-num">0</div>
-        <div class="stat-label">DAYS</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">0</div>
-        <div class="stat-label">SKILLS</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">0</div>
-        <div class="stat-label">APPLIED</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">0</div>
-        <div class="stat-label">PLACED</div>
-      </div>
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat-cell"><div class="stat-num">0</div><div class="stat-lbl">DAYS</div></div>
+      <div class="stat-cell"><div class="stat-num">0</div><div class="stat-lbl">SKILLS</div></div>
+      <div class="stat-cell"><div class="stat-num">0</div><div class="stat-lbl">APPLIED</div></div>
+      <div class="stat-cell"><div class="stat-num">0</div><div class="stat-lbl">PLACED</div></div>
     </div>
 
     <!-- SKILLS -->
-    <section class="card">
-      <span class="section-label">SKILLS</span>
-      <p class="empty-hint">まだスキルが登録されていません。<br>#自己紹介 に投稿すると、AIが自動でスキルを読み取ります。</p>
+    <section class="glass-card" style="animation-delay:0.5s;">
+      <span class="card-label">SKILLS</span>
+      <p class="empty-hint">まだスキルが登録されていません<br><span style="color:#6366f1;">#自己紹介</span> に投稿すると、AIが自動でスキルを読み取ります</p>
     </section>
 
     <!-- NEXT RANK -->
     
-    <section class="card">
-      <div class="section-header">
-        <span class="section-label">NEXT RANK</span>
-        <span class="section-value">🥈シルバー</span>
+    <section class="glass-card">
+      <div class="card-header">
+        <span class="card-label">NEXT DIMENSION</span>
+        <span class="card-badge">🥈シルバー</span>
       </div>
-      <div class="progress-track"><div class="progress-fill" style="width:25%;"></div></div>
-      <div class="check-grid"><div class="check-item" style="color:#6b7094;">○ スキル 0/3 — あと3</div><div class="check-item" style="color:#6b7094;">○ 応募 0/1 — あと1</div><div class="check-item" style="color:#4ade80;">✅ 成約 0/0</div><div class="check-item" style="color:#6b7094;">○ 活動日数 0/14 — あと14</div></div>
-      <div class="next-lifestyle">
-        <div class="lifestyle-income">月5〜20万円</div>
-        <div class="lifestyle-desc">副業で月数万円の副収入 — 趣味や自己投資に回せる余裕が生まれる</div>
+      <div class="progress-outer"><div class="progress-inner" style="width:25%;"></div></div>
+      <div class="quest-grid"><div class="quest-item ">
+              <div class="quest-icon">○</div>
+              <div class="quest-text">スキル</div>
+              <div class="quest-prog">0/3</div>
+            </div><div class="quest-item ">
+              <div class="quest-icon">○</div>
+              <div class="quest-text">応募</div>
+              <div class="quest-prog">0/1</div>
+            </div><div class="quest-item done">
+              <div class="quest-icon">✦</div>
+              <div class="quest-text">成約</div>
+              <div class="quest-prog">0/0</div>
+            </div><div class="quest-item ">
+              <div class="quest-icon">○</div>
+              <div class="quest-text">活動日数</div>
+              <div class="quest-prog">0/14</div>
+            </div></div>
+      <div class="vision-box">
+        <div class="vision-income">月5〜20万円</div>
+        <div class="vision-text">副業で月数万円の副収入 — 趣味や自己投資に回せる余裕が生まれる</div>
       </div>
     </section>
 
     <!-- EARNINGS -->
     
-    <section class="card">
-      <span class="section-label">EARNINGS POTENTIAL</span>
-      <div class="potential-box">
-        <div class="potential-title">まだ収益実績はありません</div>
-        <div class="potential-desc">
-          ギルドでは、スキルに合った案件が自動マッチングされます。<br>
-          ゴールドランクの平均的なメンバーは<strong>月20〜50万円</strong>の案件を獲得しています。
-        </div>
-        <div class="potential-steps">
-          <div class="step"><span class="step-num">1</span>スキルを登録する</div>
-          <div class="step"><span class="step-num">2</span>マッチした案件に応募</div>
-          <div class="step"><span class="step-num">3</span>成約 → 収益発生</div>
+    <section class="glass-card">
+      <span class="card-label">EARNINGS POTENTIAL</span>
+      <div class="potential">
+        <p class="potential-lead">まだ収益実績はありません</p>
+        <p class="potential-sub">ゴールドランクの平均メンバーは<strong style="color:#a78bfa;">月20〜50万円</strong>の案件を獲得</p>
+        <div class="steps-row">
+          <div class="step-card"><div class="step-orb">1</div><div class="step-txt">スキル登録</div></div>
+          <div class="step-arrow">→</div>
+          <div class="step-card"><div class="step-orb">2</div><div class="step-txt">案件に応募</div></div>
+          <div class="step-arrow">→</div>
+          <div class="step-card"><div class="step-orb">3</div><div class="step-txt">成約・収益</div></div>
         </div>
       </div>
     </section>
@@ -192,51 +318,67 @@
     <!-- MILESTONES -->
     
 
-    <!-- RANK ROADMAP -->
-    <section class="card">
-      <span class="section-label">CAREER ROADMAP</span>
+    <!-- ROADMAP -->
+    <section class="glass-card" style="animation-delay:0.8s;">
+      <span class="card-label">DIMENSIONAL ROADMAP</span>
       <div class="roadmap">
-      <div class="roadmap-item" style="opacity:1;">
-        <div class="roadmap-dot dot-current"></div>
-        <div class="roadmap-body">
-          <div class="roadmap-rank">🥉ブロンズ <span class="roadmap-phase">スタートライン</span></div>
-          <div class="roadmap-income">—</div>
-          <div class="roadmap-life">学習期間 — スキルの棚卸しと市場価値の把握</div>
+      <div class="rm-item current">
+        <div class="rm-line-wrap"><div class="rm-dot"></div></div>
+        <div class="rm-body">
+          <div class="rm-rank">🥉ブロンズ</div>
+          <div class="rm-phase">GENESIS</div>
+          <div class="rm-income">—</div>
+          <div class="rm-life">学習期間 — スキルの棚卸しと市場価値の把握</div>
         </div>
       </div>
-      <div class="roadmap-item" style="opacity:0.5;">
-        <div class="roadmap-dot dot-future"></div>
-        <div class="roadmap-body">
-          <div class="roadmap-rank">🥈シルバー <span class="roadmap-phase">実践フェーズ</span></div>
-          <div class="roadmap-income">月5〜20万円</div>
-          <div class="roadmap-life">副業で月数万円の副収入 — 趣味や自己投資に回せる余裕が生まれる</div>
+      <div class="rm-item future">
+        <div class="rm-line-wrap"><div class="rm-dot"></div></div>
+        <div class="rm-body">
+          <div class="rm-rank">🥈シルバー</div>
+          <div class="rm-phase">AWAKENING</div>
+          <div class="rm-income">月5〜20万円</div>
+          <div class="rm-life">副業で月数万円の副収入 — 趣味や自己投資に回せる余裕が生まれる</div>
         </div>
       </div>
-      <div class="roadmap-item" style="opacity:0.5;">
-        <div class="roadmap-dot dot-future"></div>
-        <div class="roadmap-body">
-          <div class="roadmap-rank">🥇ゴールド <span class="roadmap-phase">収益化フェーズ</span></div>
-          <div class="roadmap-income">月20〜50万円</div>
-          <div class="roadmap-life">副業で生活費の一部をカバー — 独立・フリーランスも視野に</div>
+      <div class="rm-item future">
+        <div class="rm-line-wrap"><div class="rm-dot"></div></div>
+        <div class="rm-body">
+          <div class="rm-rank">🥇ゴールド</div>
+          <div class="rm-phase">ASCENSION</div>
+          <div class="rm-income">月20〜50万円</div>
+          <div class="rm-life">副業で生活費の一部をカバー — 独立・フリーランスも視野に</div>
         </div>
       </div>
-      <div class="roadmap-item" style="opacity:0.5;">
-        <div class="roadmap-dot dot-future"></div>
-        <div class="roadmap-body">
-          <div class="roadmap-rank">💎プラチナ <span class="roadmap-phase">プロフェッショナル</span></div>
-          <div class="roadmap-income">月50〜100万円+</div>
-          <div class="roadmap-life">フリーランスとして独立可能 — 場所と時間に縛られない働き方</div>
+      <div class="rm-item future">
+        <div class="rm-line-wrap"><div class="rm-dot"></div></div>
+        <div class="rm-body">
+          <div class="rm-rank">💎プラチナ</div>
+          <div class="rm-phase">TRANSCENDENCE</div>
+          <div class="rm-income">月50〜100万円+</div>
+          <div class="rm-life">フリーランスとして独立可能 — 場所と時間に縛られない働き方</div>
         </div>
       </div></div>
     </section>
 
     <!-- CTA -->
-    <div class="cta-box">
-      <div class="cta-text">スキルを登録して案件に応募しよう。最初の一歩が、半年後の収入を変える。</div>
+    <div class="cta">
+      <div class="cta-msg">スキルを登録して案件に応募しよう。最初の一歩が、半年後の収入を変える。</div>
     </div>
 
-    <div class="footer">AI PM Guild DCC — 更新日: 2026-04-20</div>
+    <div class="footer">AI PM Guild DCC — 2026-04-20</div>
   </div>
+</div>
 
+
+    <script>
+    (function(){
+      const c=document.getElementById('stars'),x=c.getContext('2d');
+      let w,h,stars=[];
+      function resize(){w=c.width=window.innerWidth;h=c.height=document.body.scrollHeight;init();}
+      function init(){stars=[];for(let i=0;i<200;i++)stars.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.5+0.3,a:Math.random(),s:Math.random()*0.005+0.002});}
+      function draw(){x.clearRect(0,0,w,h);stars.forEach(s=>{s.a+=s.s;if(s.a>1)s.s=-Math.abs(s.s);if(s.a<0)s.s=Math.abs(s.s);x.beginPath();x.arc(s.x,s.y,s.r,0,Math.PI*2);x.fillStyle='rgba(180,190,255,'+s.a+')';x.fill();});requestAnimationFrame(draw);}
+      window.addEventListener('resize',resize);resize();draw();
+    })();
+    </script>
 </body>
 </html>
