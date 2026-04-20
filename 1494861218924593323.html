@@ -2,67 +2,241 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>田中マサキ — AI PM Guild</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      background:#0f1117; color:#e0e0e0;
-      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Hiragino Sans',sans-serif;
-      min-height:100vh; display:flex; justify-content:center; padding:24px 16px;
+      background:#08090e; color:#e0e0e0;
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Hiragino Sans',Roboto,sans-serif;
+      -webkit-font-smoothing:antialiased;
+      min-height:100vh; padding:0;
     }
-    @media (prefers-color-scheme: light) {
-      body { background:#f5f5f7; color:#1d1d1f; }
-      .card { background:#fff; border-color:#d2d2d7; }
-      .stat-box { background:#f0f0f5; border-color:#d2d2d7; }
-      .skill-tag { background:#e8e8ed !important; border-color:#d2d2d7 !important; color:#1d1d1f !important; }
-      .sub-text { color:#6e6e73 !important; }
+    .hero {
+      background:linear-gradient(135deg,#6b3a1f,#cd7f32,#e8a85c);
+      padding:48px 24px 36px; text-align:center;
     }
+    .hero-emoji { font-size:56px; line-height:1; }
+    .hero-name { font-size:28px; font-weight:800; color:#fff; margin:12px 0 4px; }
+    .hero-role { font-size:13px; color:rgba(255,255,255,0.7); font-weight:600; }
+    .hero-rank { font-size:14px; color:rgba(255,255,255,0.9); font-weight:700; margin-top:4px; }
+    .hero-summary { font-size:13px; color:rgba(255,255,255,0.6); margin-top:8px; max-width:400px; margin-left:auto; margin-right:auto; line-height:1.5; }
+
+    .container { max-width:520px; margin:0 auto; padding:0 16px 40px; }
+
+    .stats-bar {
+      display:flex; gap:8px; margin:-24px 16px 0; position:relative; z-index:1;
+    }
+    .stat {
+      flex:1; background:#111320; border-radius:14px; padding:16px 8px;
+      text-align:center; border:1px solid #1e2040;
+    }
+    .stat-num { font-size:24px; font-weight:800; color:#e0e4ff; line-height:1; }
+    .stat-label { font-size:9px; color:#6b7094; font-weight:700; letter-spacing:1px; margin-top:6px; }
+
+    .card {
+      background:#111320; border-radius:16px; padding:24px;
+      border:1px solid #1e2040; margin-top:16px;
+    }
+    .section-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+    .section-label { font-size:10px; color:#6b7094; font-weight:700; letter-spacing:1.5px; }
+    .section-value { font-size:13px; color:#c8cce0; font-weight:700; }
+
+    .tag-wrap { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; }
+    .tag {
+      background:#1c1f35; border:1px solid #2e3354; border-radius:20px;
+      padding:6px 16px; font-size:12px; color:#b0b8e0;
+    }
+    .empty-hint { color:#4a4f6e; font-size:13px; line-height:1.7; margin-top:8px; }
+
+    .progress-track { background:#0a0c18; border-radius:10px; height:10px; overflow:hidden; margin:8px 0 14px; }
+    .progress-fill { background:linear-gradient(90deg,#6366f1,#a78bfa); height:100%; border-radius:10px; }
+
+    .check-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+    .check-item { font-size:12px; padding:4px 0; }
+
+    .next-lifestyle {
+      margin-top:16px; padding:16px; background:#0d0f1a; border-radius:12px;
+      border:1px solid #1a1d35;
+    }
+    .lifestyle-income { font-size:20px; font-weight:800; color:#a78bfa; margin-bottom:4px; }
+    .lifestyle-desc { font-size:12px; color:#7a7f9a; line-height:1.6; }
+
+    .earnings-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
+    .earnings-item { background:#0d0f1a; border-radius:12px; padding:16px; text-align:center; border:1px solid #1a1d35; }
+    .earnings-num { font-size:20px; font-weight:800; color:#4ade80; }
+    .earnings-label { font-size:10px; color:#6b7094; font-weight:600; letter-spacing:0.5px; margin-top:4px; }
+
+    .potential-box { margin-top:12px; }
+    .potential-title { font-size:15px; font-weight:700; color:#c8cce0; margin-bottom:8px; }
+    .potential-desc { font-size:13px; color:#7a7f9a; line-height:1.7; }
+    .potential-steps { display:flex; gap:12px; margin-top:16px; }
+    .step {
+      flex:1; background:#0d0f1a; border-radius:12px; padding:14px 10px;
+      text-align:center; font-size:12px; color:#a0a8c0; line-height:1.5;
+      border:1px solid #1a1d35;
+    }
+    .step-num {
+      display:block; width:24px; height:24px; line-height:24px; margin:0 auto 6px;
+      background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#fff;
+      border-radius:50%; font-size:11px; font-weight:700;
+    }
+
+    .milestone-item { display:flex; gap:12px; padding:10px 0; border-bottom:1px solid #1a1d35; }
+    .milestone-item:last-child { border-bottom:none; }
+    .milestone-date { font-size:11px; color:#6b7094; white-space:nowrap; min-width:80px; padding-top:2px; }
+    .milestone-text { font-size:13px; color:#c8cce0; }
+
+    .roadmap { margin-top:16px; }
+    .roadmap-item { display:flex; gap:16px; padding:14px 0; position:relative; }
+    .roadmap-item:not(:last-child)::before {
+      content:''; position:absolute; left:9px; top:34px; bottom:-14px;
+      width:2px; background:#1e2040;
+    }
+    .roadmap-dot {
+      width:20px; height:20px; border-radius:50%; flex-shrink:0; margin-top:2px;
+    }
+    .dot-done { background:#4ade80; }
+    .dot-current { background:linear-gradient(135deg,#6366f1,#a78bfa); box-shadow:0 0 12px rgba(99,102,241,0.5); }
+    .dot-future { background:#1e2040; border:2px solid #2e3354; }
+    .roadmap-body { flex:1; }
+    .roadmap-rank { font-size:14px; font-weight:700; color:#e0e4ff; }
+    .roadmap-phase { font-size:11px; color:#6b7094; font-weight:600; margin-left:6px; }
+    .roadmap-income { font-size:16px; font-weight:800; color:#a78bfa; margin:4px 0 2px; }
+    .roadmap-life { font-size:12px; color:#7a7f9a; line-height:1.5; }
+
+    .footer {
+      text-align:center; padding:24px 16px; font-size:10px; color:#2e3250;
+    }
+
+    .cta-box {
+      text-align:center; margin-top:16px; padding:20px;
+      background:linear-gradient(135deg,rgba(99,102,241,0.1),rgba(139,92,246,0.1));
+      border-radius:14px; border:1px solid #2e2860;
+    }
+    .cta-text { font-size:14px; color:#c8cce0; line-height:1.7; margin-bottom:4px; }
+    .cta-bold { font-size:16px; font-weight:800; color:#a78bfa; }
   </style>
 </head>
 <body>
-  <div class="card" style="max-width:520px;width:100%;background:#1a1d27;border-radius:20px;padding:32px;border:1px solid #2a2d3a;">
-    <div style="text-align:center;margin-bottom:24px;">
-      <div style="font-size:48px;margin-bottom:8px;">🥉</div>
-      <h1 style="font-size:22px;font-weight:800;margin:0;">田中マサキ</h1>
-      <p class="sub-text" style="color:#888;font-size:13px;margin:4px 0;"></p>
-      <p style="color:#cd7f32;font-size:14px;font-weight:700;margin:4px 0;">🥉ブロンズ</p>
-    </div>
 
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-emoji">🥉</div>
+    <div class="hero-name">田中マサキ</div>
+    <div class="hero-role"></div>
+    <div class="hero-rank">🥉ブロンズ — スタートライン</div>
     
-
-    <div style="display:flex;gap:12px;margin:20px 0;">
-      <div class="stat-box" style="flex:1;background:#12141c;border-radius:12px;padding:16px;text-align:center;border:1px solid #2a2d3a;">
-        <div style="font-size:24px;font-weight:800;color:#88aaff;">0</div>
-        <div class="sub-text" style="color:#888;font-size:11px;">ギルド歴(日)</div>
-      </div>
-      <div class="stat-box" style="flex:1;background:#12141c;border-radius:12px;padding:16px;text-align:center;border:1px solid #2a2d3a;">
-        <div style="font-size:24px;font-weight:800;color:#88aaff;">0</div>
-        <div class="sub-text" style="color:#888;font-size:11px;">スキル</div>
-      </div>
-      <div class="stat-box" style="flex:1;background:#12141c;border-radius:12px;padding:16px;text-align:center;border:1px solid #2a2d3a;">
-        <div style="font-size:24px;font-weight:800;color:#88aaff;">0</div>
-        <div class="sub-text" style="color:#888;font-size:11px;">応募</div>
-      </div>
-      <div class="stat-box" style="flex:1;background:#12141c;border-radius:12px;padding:16px;text-align:center;border:1px solid #2a2d3a;">
-        <div style="font-size:24px;font-weight:800;color:#88aaff;">0</div>
-        <div class="sub-text" style="color:#888;font-size:11px;">成約</div>
-      </div>
-    </div>
-
-    
-    
-    <div style="margin:20px 0;">
-      <p style="color:#888;font-size:13px;margin:0 0 8px;">次のランク: <strong style="color:#e0e0e0;">🥈シルバー</strong></p>
-      <div style="background:#1e2030;border-radius:8px;height:14px;overflow:hidden;">
-        <div style="background:linear-gradient(90deg,#4466ff,#88aaff);height:100%;width:25%;border-radius:8px;transition:width 0.3s;"></div>
-      </div>
-    </div>
-
-    <hr style="border:none;border-top:1px solid #2a2d3a;margin:24px 0;">
-    <p class="sub-text" style="color:#555;font-size:11px;text-align:center;">
-      AI PM Guild DCC — 更新日: 2026-04-20
-    </p>
   </div>
+
+  <!-- STATS BAR -->
+  <div class="container">
+    <div class="stats-bar">
+      <div class="stat">
+        <div class="stat-num">0</div>
+        <div class="stat-label">DAYS</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">0</div>
+        <div class="stat-label">SKILLS</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">0</div>
+        <div class="stat-label">APPLIED</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">0</div>
+        <div class="stat-label">PLACED</div>
+      </div>
+    </div>
+
+    <!-- SKILLS -->
+    <section class="card">
+      <span class="section-label">SKILLS</span>
+      <p class="empty-hint">まだスキルが登録されていません。<br>#自己紹介 に投稿すると、AIが自動でスキルを読み取ります。</p>
+    </section>
+
+    <!-- NEXT RANK -->
+    
+    <section class="card">
+      <div class="section-header">
+        <span class="section-label">NEXT RANK</span>
+        <span class="section-value">🥈シルバー</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" style="width:25%;"></div></div>
+      <div class="check-grid"><div class="check-item" style="color:#6b7094;">○ スキル 0/3 — あと3</div><div class="check-item" style="color:#6b7094;">○ 応募 0/1 — あと1</div><div class="check-item" style="color:#4ade80;">✅ 成約 0/0</div><div class="check-item" style="color:#6b7094;">○ 活動日数 0/14 — あと14</div></div>
+      <div class="next-lifestyle">
+        <div class="lifestyle-income">月5〜20万円</div>
+        <div class="lifestyle-desc">副業で月数万円の副収入 — 趣味や自己投資に回せる余裕が生まれる</div>
+      </div>
+    </section>
+
+    <!-- EARNINGS -->
+    
+    <section class="card">
+      <span class="section-label">EARNINGS POTENTIAL</span>
+      <div class="potential-box">
+        <div class="potential-title">まだ収益実績はありません</div>
+        <div class="potential-desc">
+          ギルドでは、スキルに合った案件が自動マッチングされます。<br>
+          ゴールドランクの平均的なメンバーは<strong>月20〜50万円</strong>の案件を獲得しています。
+        </div>
+        <div class="potential-steps">
+          <div class="step"><span class="step-num">1</span>スキルを登録する</div>
+          <div class="step"><span class="step-num">2</span>マッチした案件に応募</div>
+          <div class="step"><span class="step-num">3</span>成約 → 収益発生</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MILESTONES -->
+    
+
+    <!-- RANK ROADMAP -->
+    <section class="card">
+      <span class="section-label">CAREER ROADMAP</span>
+      <div class="roadmap">
+      <div class="roadmap-item" style="opacity:1;">
+        <div class="roadmap-dot dot-current"></div>
+        <div class="roadmap-body">
+          <div class="roadmap-rank">🥉ブロンズ <span class="roadmap-phase">スタートライン</span></div>
+          <div class="roadmap-income">—</div>
+          <div class="roadmap-life">学習期間 — スキルの棚卸しと市場価値の把握</div>
+        </div>
+      </div>
+      <div class="roadmap-item" style="opacity:0.5;">
+        <div class="roadmap-dot dot-future"></div>
+        <div class="roadmap-body">
+          <div class="roadmap-rank">🥈シルバー <span class="roadmap-phase">実践フェーズ</span></div>
+          <div class="roadmap-income">月5〜20万円</div>
+          <div class="roadmap-life">副業で月数万円の副収入 — 趣味や自己投資に回せる余裕が生まれる</div>
+        </div>
+      </div>
+      <div class="roadmap-item" style="opacity:0.5;">
+        <div class="roadmap-dot dot-future"></div>
+        <div class="roadmap-body">
+          <div class="roadmap-rank">🥇ゴールド <span class="roadmap-phase">収益化フェーズ</span></div>
+          <div class="roadmap-income">月20〜50万円</div>
+          <div class="roadmap-life">副業で生活費の一部をカバー — 独立・フリーランスも視野に</div>
+        </div>
+      </div>
+      <div class="roadmap-item" style="opacity:0.5;">
+        <div class="roadmap-dot dot-future"></div>
+        <div class="roadmap-body">
+          <div class="roadmap-rank">💎プラチナ <span class="roadmap-phase">プロフェッショナル</span></div>
+          <div class="roadmap-income">月50〜100万円+</div>
+          <div class="roadmap-life">フリーランスとして独立可能 — 場所と時間に縛られない働き方</div>
+        </div>
+      </div></div>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta-box">
+      <div class="cta-text">スキルを登録して案件に応募しよう。最初の一歩が、半年後の収入を変える。</div>
+    </div>
+
+    <div class="footer">AI PM Guild DCC — 更新日: 2026-04-20</div>
+  </div>
+
 </body>
 </html>
